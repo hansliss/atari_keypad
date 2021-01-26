@@ -2,13 +2,13 @@
 
 A 12-key keypad for the joystick port, based on the Atari 2600 keypad
 
-![keypad](2021-01-26 15.11.23.jpg)
+![keypad](2021-01-26%2015.11.23.jpg)
 
 The keypad uses Kailh sockets for Cherry MX-compatible keyswitches,
 and is meant to be used with a 3d-printed box, including a faceplate
 to keep the switches in place. This box has not been designed yet.
 
-![keypad bottom](2021-01-26 15.11.12.jpg)
+![keypad bottom](2021-01-26%2015.11.12.jpg)
 
 The keypad has anti-ghosting diodes on all keys. There are three
 pull-up resistors, one for each column. The original keypad only
@@ -20,7 +20,7 @@ this with a straight, fully connected DB-9 male-to-female cable to
 connect the keypad to a computer or console, or you can just solder
 cables to the solder pads if you prefer that.
 
-![keypad and VIC](2021-01-26 15.07.02.jpg)
+![keypad and VIC](2021-01-26%2015.07.02.jpg)
 
 Included is also VIC-20 code for scanning the keypad. It includes
 full N-key rollover and produces two bytes of bits, one bit for each
