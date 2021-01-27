@@ -1,3 +1,5 @@
+!-CONST KEY $1A00
+!-CONST REORG $1A0C
 10 PRINT"{clear}{red}";
 20 PRINT"{cm a}{sh asterisk}{cm r}{sh asterisk}{cm r}{sh asterisk}{cm s}"
 30 PRINT"{sh -}1{sh -}2{sh -}3{sh -}"
@@ -14,11 +16,10 @@
 140 P(Y*3+X+1)=7680+Y*44+X*2+23
 150 NEXT
 160 NEXT
-170 SYS6669
-180 SYS6964
+180 SYS REORG
 190 FOR Y=0 TO 3
 200 FOR X=0 TO 2
-210 V=PEEK(6952 + Y*3 + X)
+210 V=PEEK(KEY + Y*3 + X)
 220 IF V<>0 THEN POKE P(Y*3+X+1),PEEK(P(Y*3+X+1)) OR 128
 230 IF V=0 THEN POKE P(Y*3+X+1),PEEK(P(Y*3+X+1)) AND 127
 240 NEXT

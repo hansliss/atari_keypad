@@ -1,3 +1,6 @@
+!-CONST KEY1 $1A0D
+!-CONST KEY2 $1A0E
+!-CONST POLL $1A0F
 10 PRINT"{clear}{red}";
 20 PRINT"{cm a}{sh asterisk}{cm r}{sh asterisk}{cm r}{sh asterisk}{cm s}"
 30 PRINT"{sh -}1{sh -}2{sh -}3{sh -}"
@@ -14,8 +17,8 @@
 140 P(Y*3+X+1)=7680+Y*44+X*2+23
 150 NEXT
 160 NEXT
-170 SYS6669
-180 LK1=K1:LK2=K2:K1=PEEK(6665):K2=PEEK(6666)
+170 SYS POLL
+180 LK1=K1:LK2=K2:K1=PEEK(KEY1):K2=PEEK(KEY2)
 190 IF LK1=K1 AND LK2=K2 THEN 170
 200 FOR Y=0 TO 3
 210 FOR X=0 TO 2
