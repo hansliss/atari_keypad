@@ -27,11 +27,15 @@ full N-key rollover and produces two bytes of bits, one bit for each
 key. Debouncing is done by delaying keypress events until they have
 been seen by at least two scanning cycles.
 
-There is a second machine code function that "unpacks" the bytes into
-a series of individual bytes, one for each key. This is because BASIC
-turns out to be breathtakingly slow at this kind of bit-mangling.
+There is a second machine code program that calls the poller and then
+"unpacks" the bit fields into a series of individual bytes, one for
+each key. This is because BASIC turns out to be breathtakingly slow
+at this kind of bit-mangling.
 
 There are two BASIC programs, one that uses just the main subroutine
-and does the bit unpacking itself, and another on that uses the machine
-code subroutine to unpack the bytes. The second one is a little bit
+and does the bit unpacking itself, and another on that uses the "reorg"
+subroutine to to get unpacked bytes. The second one is a little bit
 faster.
+
+Finally, there is a machine code version of the BASIC code, which
+better demonstrates the keypad at full speed.
