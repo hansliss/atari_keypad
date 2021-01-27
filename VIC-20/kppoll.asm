@@ -29,8 +29,6 @@ SCRATCH BYTE 0
 ; persistent
 ;  the two key state bytes
 KEY     BYTE 0,0
-;  the previous state of keys
-LAST    BYTE 0,0
 ;  debouncing status
 DEBST   BYTE 0,0
 
@@ -171,21 +169,17 @@ CBLOOP
         ; Here if the current key is *not* pressed.
         ; Check whether it was pressed the last time.
         ; if !(last[idx] & bitmask) goto end
-        LDA LAST,Y
+        LDA KEY,Y
         AND BITMASK
         BEQ END
 
         ; Release event - we just clear the current bit
-        ; in KEY, LAST and DEBST
+        ; in KEY and DEBST
         LDX INVBM
         ; key[idx] &= inversebitmask
         TXA
         AND KEY,Y
         STA KEY,Y
-        ; last[idx] &= inversebitmask
-        TXA
-        AND LAST,Y
-        STA LAST,Y
         ; debounce[idx] &= inversebitmask
         TXA
         AND DEBST,Y
@@ -196,7 +190,7 @@ ISPRSD
 
         ; Key is pressed. Was it already pressed?
         ; if last[idx] & bitmask goto end
-        LDA LAST,Y
+        LDA KEY,Y
         AND BITMASK
         BNE END
 
@@ -206,15 +200,11 @@ ISPRSD
         AND BITMASK
         BEQ DEB
 
-        ; Now set the bit in KEY and LAST
+        ; Now set the bit in KEY
         ; key[idx] |= bitmask
         TXA
         ORA KEY,Y
         STA KEY,Y
-        ; last[idx] |= bitmask
-        TXA
-        ORA LAST,Y
-        STA LAST,Y
         JMP END
 
         ; Debounce - just mark this as on in DEBST
