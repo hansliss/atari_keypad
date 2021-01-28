@@ -148,6 +148,11 @@ C4
         LDA #$02
         STA COLUMN
 
+        ; A branch point to avoid JMP
+        BNE CLOOP
+GRLOOP2
+        BCC RLOOP
+
 CLOOP
         ; Now loop over the columns
         ; calculate idx, shift and bitmask
@@ -186,7 +191,7 @@ BMLOOP
         BPL BMLOOP
 
         STA BITMASK
-        ; inversebitmask = ~bitmask
+        ; inverse bitmask = ~bitmask
         EOR #$FF
         STA INVBM
         ; colbitmask = 1 << column
@@ -197,34 +202,43 @@ CBLOOP
         ROL
         DEY
         BPL CBLOOP
-        ; We don't need to store this bitmask
 
+        ; We don't need to store this bitmask
         LDY IDX
         ; if !(columns & colbitmask) goto isprsd
         ; We only use COLUMNS and the colbitmask here,
         ; so there might be room for optimization.
         AND COLUMNS
         BEQ ISPRSD
-        
-        ; Here if the current key is *not* pressed.
-        ; Check whether it was pressed the last time.
-        ; if !(last[idx] & bitmask) goto end
-        LDA KEY$,Y
-        AND BITMASK
-        BEQ END
 
-        ; Release event - we just clear the current bit
-        ; in KEY and DEBST
+        ; Jump point for backward branch to start
+        BNE SKIP1
+GCLOOP
+        BCC CLOOP
+GRLOOP1
+        BCC GRLOOP2
+SKIP1
+
+        ; Here if the current key is *not* pressed.
+
+        ; load the inverse bitmask
         LDX INVBM
-        ; key[idx] &= inversebitmask
-        TXA
-        AND KEY$,Y
-        STA KEY$,Y
-        ; debounce[idx] &= inversebitmask
+
+        ; if the key is not pressed, we need
+        ; to clear the debounce bit for this key.
+        ; debounce[idx] &= inverse bitmask
         TXA
         AND DEBST,Y
         STA DEBST,Y
-        JMP END
+
+        ; Release event - we just clear the current bit
+        ; in KEY and DEBST
+        ; key[idx] &= inverse bitmask
+        TXA
+        AND KEY$,Y
+        STA KEY$,Y
+        CLC
+        BCC END
 ISPRSD
         LDX BITMASK
 
@@ -245,7 +259,8 @@ ISPRSD
         TXA
         ORA KEY$,Y
         STA KEY$,Y
-        JMP END
+        CLC
+        BCC END
 
         ; Debounce - just mark this as on in DEBST
         ; and we will handle it on the next run
@@ -258,11 +273,13 @@ END
         ; if column >= 0 goto cloop
         DEC COLUMN
         BMI CFIN
-        JMP CLOOP
+        CLC
+        BCC GCLOOP
 CFIN
         DEC ROW
         ; if row >= 0 goto rloop
         BMI RFIN
-        JMP RLOOP
+        CLC
+        BCC GRLOOP1
 RFIN
         RTS
