@@ -17,8 +17,9 @@ holeDistXFromSwitchCenter = 9.85;
 bottomHoleDistYFromSwitchCenter = 11;
 holeYDistance=91.2;
 
+// The keys are, sadly, not exactly centered, but this design is fixed now so we'll compensate instead.
 holeRightXPos = 59.5/2; //((switchesX - 1) / 2) * switchDistX + holeDistXFromSwitchCenter;
-holeLeftXPos = -holeRightXPos;
+holeLeftXPos = -holeRightXPos - 0.43;
 bottomHoleYPos = -(((switchesY - 1) / 2) * switchDistY + bottomHoleDistYFromSwitchCenter);
 topHoleYPos = bottomHoleYPos + holeYDistance;
 
